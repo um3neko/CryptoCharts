@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CryptoCharts.MVVM.ViewModels;
+using System.Windows;
 
 namespace CryptoCharts;
 
