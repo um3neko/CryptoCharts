@@ -1,35 +1,32 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CryptoCharts.MVVM.Base;
+using CryptoCharts.MVVM.ViewModels;
+using CryptoCharts.Services.Client;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Windows;
 
 namespace CryptoCharts;
 
 public partial class App : Application
 {
-    public static IHost? AppHost { get; private set; }
+    private readonly ServiceProvider _serviceProvider;
     public App()
     {
-        AppHost = Host.CreateDefaultBuilder()
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddSingleton<MainWindow>();
-            })
-            .Build();
+        IServiceCollection services = new ServiceCollection();
+        
+        services.AddSingleton<MainWindow>();
+        services.AddSingleton<MainViewModel>();
+        services.AddScoped<ICryptoHttpClient, CryptoHttpClient>();
+        _serviceProvider = services.BuildServiceProvider();
     }
 
-    protected override async void OnStartup(StartupEventArgs e)
+    protected override void OnStartup(StartupEventArgs e)
     {
-        await AppHost!.StartAsync();
-        var startupForm = AppHost.Services.GetRequiredService<MainWindow>();
+        var startupForm = _serviceProvider.GetRequiredService<MainWindow>();
+        startupForm.DataContext = _serviceProvider.GetRequiredService<MainViewModel>();
         startupForm.Show();
-
         base.OnStartup(e);
     }
 
-    protected override async void OnExit(ExitEventArgs e)
-    {
-        await AppHost!.StopAsync();
-
-        base.OnExit(e);
-    }
 }
