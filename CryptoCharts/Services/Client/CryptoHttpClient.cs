@@ -23,7 +23,7 @@ public class CryptoHttpClient : ICryptoHttpClient
         {
             string jsonResponse = await response.Content.ReadAsStringAsync();
             CryptoData? item =  JsonConvert.DeserializeObject<CryptoData>(jsonResponse);
-            return item.CryptoCurrency;
+            return item.Data;
         }
         else
         {

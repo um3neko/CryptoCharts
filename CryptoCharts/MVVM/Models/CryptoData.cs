@@ -2,6 +2,6 @@
 
 public class CryptoData
 {   
-    public CryptoCurrency CryptoCurrency { get; set; }
+    public CryptoCurrency Data { get; set; }
     public long Timestamp { get; set; }   
 }
